@@ -11,7 +11,6 @@ import {
   ClipboardCopyIcon,
 } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 
 import MenuItem from './MenuItem'
 import { logout } from '@utils/authUtils'
@@ -21,7 +20,6 @@ interface AppSidebarProps {
 }
 
 const AppSidebar: FC<AppSidebarProps> = ({ isCollapsed = false }) => {
-  const router = useRouter()
   const stackSpacing = isCollapsed ? 4 : 1
   return (
     <Flex pos="fixed" w={isCollapsed ? 14 : 52} bg="#F9F9F9" h="100vh" flexDir="column" justifyContent="space-between">

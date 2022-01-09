@@ -90,7 +90,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
     name: 'reimbursements',
   })
 
-  const { createSalaryRecordAction, updateSalaryRecordAction, deleteSalaryRecordAction } = useSalaryRecordMutation()
+  const { createSalaryRecordAction, updateSalaryRecordAction } = useSalaryRecordMutation()
   const { isSubmitting } = formState
   const onSubmit = async (values: CustomSalaryRecord) => {
     const parseEarnings = values.earnings?.map((earning) => {

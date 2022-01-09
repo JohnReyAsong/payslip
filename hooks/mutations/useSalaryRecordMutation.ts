@@ -11,7 +11,7 @@ const useSalaryRecordMutation = () => {
   const [updateSalaryRecord] = useMutation<{ updateSalaryRecord: string }, MutationUpdateSalaryRecordArgs>(
     UPDATE_SALARY_RECORD
   )
-  const [deleteSalaryRecord] = useMutation<{ updateSalaryRecord: string }, MutationDeleteSalaryRecordArgs>(
+  const [deleteSalaryRecord] = useMutation<{ deleteSalaryRecord: string }, MutationDeleteSalaryRecordArgs>(
     DELETE_SALARY_RECORD
   )
 
