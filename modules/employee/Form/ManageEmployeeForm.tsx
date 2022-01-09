@@ -1,9 +1,9 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { FormControl, FormLabel, Input, Stack, HStack, Text, Flex, Button, Select } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
 
-import { UserRole } from 'types'
-import { useUsersQuery, useDepartmentsQuery } from '@hooks/queries'
+import { Designation, UserRole } from 'types'
+import { useUsersQuery, useDepartmentsQuery, useDesignationsQuery } from '@hooks/queries'
 import useUserMutation from '@hooks/mutations/useUserMutation'
 import { CustomUser } from '../Employee'
 import { showToast } from '@utils/toastUtils'
@@ -29,9 +29,15 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
   const { handleSubmit, register, formState, reset } = useForm()
   const { createUserAction, updateUserAction } = useUserMutation()
   const { refetchUsers } = useUsersQuery()
+  const [filteredDesignations, setFilteredDesignations] = useState<Designation[]>()
   const { departments } = useDepartmentsQuery()
-
+  const { designations } = useDesignationsQuery()
   const { isSubmitting } = formState
+
+  const onSelectDepartment = (name: string) => {
+    const filterDesignations = designations?.edges.filter((designation) => designation?.department.name === name)
+    setFilteredDesignations(filterDesignations as Designation[])
+  }
 
   const onSubmit = async (value: CustomUser) => {
     if (isCreate) {
@@ -40,6 +46,7 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
           firstname: value.firstname,
           lastname: value.lastname,
           address: value.address,
+          designation: value.designation,
           emailAddress: value.emailAddress,
           password: value.password,
           role: value.role,
@@ -84,6 +91,7 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
         firstname: selectedEmployee?.firstname || '',
         lastname: selectedEmployee?.lastname || '',
         address: selectedEmployee?.address || '',
+        designation: selectedEmployee.designation || '',
         emailAddress: selectedEmployee?.emailAddress || '',
         password: selectedEmployee?.password || '',
         role: selectedEmployee?.role || UserRole.Member,
@@ -144,10 +152,28 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
           <FormLabel size="xs" color="gray.700">
             Department
           </FormLabel>
-          <Select id="email" type="text" size="sm" {...register('department')}>
+          <Select
+            id="email"
+            type="text"
+            size="sm"
+            {...register('department')}
+            onChange={(e) => onSelectDepartment(e.target.value)}
+          >
             {departments?.edges.map((department) => (
               <>
                 <option value={department?.name}>{department?.name}</option>
+              </>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl isRequired>
+          <FormLabel size="xs" color="gray.700">
+            Designation
+          </FormLabel>
+          <Select id="email" type="text" size="sm" {...register('designation')}>
+            {filteredDesignations?.map((designation) => (
+              <>
+                <option value={designation?.id}>{designation?.name}</option>
               </>
             ))}
           </Select>

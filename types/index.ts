@@ -15,6 +15,11 @@ export type Scalars = {
   JSON: any
 }
 
+export type Attachments = {
+  filename: Scalars['String']
+  path: Scalars['String']
+}
+
 export type AuthenticateInput = {
   emailAddress: Scalars['EmailAddress']
   password: Scalars['String']
@@ -64,6 +69,11 @@ export type CreateDepartmentInput = {
   name: Scalars['String']
 }
 
+export type CreateDesignationInput = {
+  department: Scalars['ID']
+  name: Scalars['String']
+}
+
 export type CreateReimbursementInput = {
   name: Scalars['String']
 }
@@ -86,6 +96,7 @@ export type CreateUserInput = {
   bankName: Scalars['String']
   baseSalary: Scalars['Float']
   department: Scalars['String']
+  designation: Scalars['String']
   emailAddress: Scalars['EmailAddress']
   firstname: Scalars['String']
   lastname: Scalars['String']
@@ -157,7 +168,29 @@ export type DepartmentConnectionsEdge = {
   node: Department
 }
 
+export type Designation = {
+  __typename?: 'Designation'
+  createdAt: Scalars['DateTime']
+  department: Department
+  id: Scalars['ID']
+  name: Scalars['String']
+  updatedAt?: Maybe<Scalars['DateTime']>
+}
+
+export type DesignationConnectionsEdge = {
+  __typename?: 'DesignationConnectionsEdge'
+  cursor: Scalars['Binary']
+  node: Designation
+}
+
+export type DesignationtConnection = {
+  __typename?: 'DesignationtConnection'
+  edges: Array<Maybe<Designation>>
+  totalCount: Scalars['Int']
+}
+
 export type GenerateEmail = {
+  attachments: Array<Maybe<Attachments>>
   emailAddress: Scalars['EmailAddress']
 }
 
@@ -167,17 +200,20 @@ export type Mutation = {
   createBonus: Scalars['ID']
   createDeduction: Scalars['ID']
   createDepartment: Scalars['ID']
+  createDesignation: Scalars['ID']
   createReimbursement: Scalars['ID']
   createSalaryRecord: Scalars['ID']
   createUser: Scalars['ID']
   deleteBonus: Scalars['Boolean']
   deleteDeduction: Scalars['Boolean']
+  deleteDesignation: Scalars['Boolean']
   deleteReimbursement: Scalars['Boolean']
   deleteSalaryRecord: Scalars['Boolean']
   sendEmail: Scalars['Boolean']
   updateBonus: Scalars['Boolean']
   updateDeduction: Scalars['Boolean']
   updateDepartment: Scalars['Boolean']
+  updateDesignation: Scalars['Boolean']
   updateMe?: Maybe<Scalars['Boolean']>
   updateReimbursement: Scalars['Boolean']
   updateSalaryRecord: Scalars['Boolean']
@@ -200,6 +236,10 @@ export type MutationCreateDepartmentArgs = {
   input: CreateDepartmentInput
 }
 
+export type MutationCreateDesignationArgs = {
+  input: CreateDesignationInput
+}
+
 export type MutationCreateReimbursementArgs = {
   input: CreateReimbursementInput
 }
@@ -217,6 +257,10 @@ export type MutationDeleteBonusArgs = {
 }
 
 export type MutationDeleteDeductionArgs = {
+  id: Scalars['ID']
+}
+
+export type MutationDeleteDesignationArgs = {
   id: Scalars['ID']
 }
 
@@ -247,6 +291,11 @@ export type MutationUpdateDepartmentArgs = {
   input: UpdateDepartmentInput
 }
 
+export type MutationUpdateDesignationArgs = {
+  id: Scalars['ID']
+  input: UpdateDesignationInput
+}
+
 export type MutationUpdateMeArgs = {
   input: UpdateMeInput
 }
@@ -274,6 +323,8 @@ export type Query = {
   deductions?: Maybe<DeductiontConnection>
   department?: Maybe<Department>
   departments?: Maybe<DepartmentConnection>
+  designation?: Maybe<Designation>
+  designations?: Maybe<DesignationtConnection>
   me?: Maybe<User>
   reimbursement?: Maybe<Reimbursement>
   reimbursements?: Maybe<ReimbursementConnection>
@@ -305,6 +356,15 @@ export type QueryDepartmentArgs = {
 }
 
 export type QueryDepartmentsArgs = {
+  filter?: Maybe<StringQueryOperatorInput>
+  first?: Maybe<Scalars['Int']>
+}
+
+export type QueryDesignationArgs = {
+  id?: Maybe<Scalars['ID']>
+}
+
+export type QueryDesignationsArgs = {
   filter?: Maybe<StringQueryOperatorInput>
   first?: Maybe<Scalars['Int']>
 }
@@ -414,6 +474,11 @@ export type UpdateDepartmentInput = {
   name: Scalars['String']
 }
 
+export type UpdateDesignationInput = {
+  department?: Maybe<Scalars['ID']>
+  name: Scalars['String']
+}
+
 export type UpdateMeInput = {
   accountNumber?: Maybe<Scalars['String']>
   address?: Maybe<Scalars['String']>
@@ -446,6 +511,7 @@ export type UpdateUserInput = {
   bankName?: Maybe<Scalars['String']>
   baseSalary?: Maybe<Scalars['Float']>
   department?: Maybe<Scalars['String']>
+  designation?: Maybe<Scalars['String']>
   emailAddress?: Maybe<Scalars['EmailAddress']>
   firstname?: Maybe<Scalars['String']>
   lastname?: Maybe<Scalars['String']>
@@ -461,6 +527,7 @@ export type User = {
   baseSalary: Scalars['Float']
   createdAt: Scalars['DateTime']
   department: Scalars['String']
+  designation: Scalars['String']
   emailAddress: Scalars['EmailAddress']
   firstname: Scalars['String']
   id: Scalars['ID']

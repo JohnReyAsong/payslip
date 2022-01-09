@@ -30,6 +30,7 @@ const EmployeeModule: FC = () => {
   const { isOpen: isOpenManage, onOpen: onOpenManage, onClose: onCloseManage } = useDisclosure()
   const { users } = useUsersQuery()
   const [selectedEmployee, setSelectedEmployee] = useState<CustomUser>()
+  console.log(users)
 
   return (
     <>
@@ -43,6 +44,7 @@ const EmployeeModule: FC = () => {
             firstname: '',
             lastname: '',
             address: '',
+            designation: '',
             emailAddress: '',
             password: '',
             role: UserRole.Member,
@@ -54,7 +56,7 @@ const EmployeeModule: FC = () => {
         }}
       />
       <Flex justifyContent="end">
-        <Button mb={4} ml={2} colorScheme="blue" onClick={onOpenManage}>
+        <Button mb={4} colorScheme="blue" onClick={onOpenManage}>
           Create Employee
         </Button>
       </Flex>
@@ -94,6 +96,7 @@ const EmployeeModule: FC = () => {
                           firstname: user?.firstname || '',
                           lastname: user?.lastname || '',
                           address: user?.address || '',
+                          designation: user?.designation || '',
                           emailAddress: user?.emailAddress || '',
                           password: user?.password || '',
                           role: user?.role || UserRole.Member,

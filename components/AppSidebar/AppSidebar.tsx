@@ -43,6 +43,7 @@ const AppSidebar: FC<AppSidebarProps> = ({ isCollapsed = false }) => {
           <MenuItem icon={ReceiptTaxIcon} label="Payslip" isCollapsed={isCollapsed} pathname="/" />
           <MenuItem icon={UserIcon} label="Employee" isCollapsed={isCollapsed} pathname="/employee" />
           <MenuItem icon={UserGroupIcon} label="Department" isCollapsed={isCollapsed} pathname="/department" />
+          <MenuItem icon={UserGroupIcon} label="Designation" isCollapsed={isCollapsed} pathname="/designation" />
           <MenuItem icon={CashIcon} label="Earnings" isCollapsed={isCollapsed} pathname="/earning" />
           <MenuItem icon={ScissorsIcon} label="Deduction" isCollapsed={isCollapsed} pathname="/deduction" />
           <MenuItem
