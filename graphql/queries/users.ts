@@ -9,6 +9,7 @@ export const USERS = gql`
         firstname
         lastname
         address
+        designation
         emailAddress
         role
         department

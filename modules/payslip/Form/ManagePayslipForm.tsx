@@ -12,6 +12,7 @@ import {
   useBonusesQuery,
   useReimbursementsQuery,
   useDepartmentsQuery,
+  useDesignationsQuery,
 } from '@hooks/queries'
 
 interface ManagePayslipFormProps {
@@ -24,6 +25,7 @@ interface CustomSalaryRecord {
   employeeId: string
   department: string
   address: string
+  designation: string
   accountNumber: string
   bankName: string
   earnings?: { id: string; amount: number }[]
@@ -37,10 +39,12 @@ interface CustomSalaryRecord {
 }
 
 const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalaryRecord, isCreate }) => {
+  console.log(selectedSalaryRecord)
   const { users } = useUsersQuery()
   const { bonuses: earningsMapping } = useBonusesQuery()
   const { deductions: deductionsMapping } = useDeductionsQuery()
   const { reimbursements: reimbursementsMapping } = useReimbursementsQuery()
+  const { designations } = useDesignationsQuery()
   const { departments } = useDepartmentsQuery()
   const { refetchSalaryRecords } = useSalaryRecordsQuery()
   const { handleSubmit, register, formState, reset, setValue, control, watch } = useForm<CustomSalaryRecord>({
@@ -48,6 +52,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
       employeeId: '',
       department: '',
       address: '',
+      designation: '',
       accountNumber: '',
       bankName: '',
       grossIncome: 0,
@@ -128,7 +133,6 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
             startDate: values.payrollDate as unknown as string,
             endDate: values.payrollDate as unknown as string,
           },
-
           depositDate: values.payrollDate,
           reimbursements: parseReimbursements,
           bonus: parseEarnings,
@@ -170,6 +174,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
   const onSelectEmployee = (id: string) => {
     const employee = users?.edges.find((user) => user?.id === id)
     setValue('department', employee?.department || '')
+    setValue('designation', employee?.designation || '')
     setValue('address', employee?.address || '')
     setValue('accountNumber', employee?.accountNumber || '')
     setValue('bankName', employee?.bankName || '')
@@ -183,6 +188,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
         endDate: selectedSalaryRecord.payPeriod.endDate,
         payrollDate: selectedSalaryRecord.payrollDate,
         depositDate: selectedSalaryRecord.depositDate,
+        designation: selectedSalaryRecord.employee.designation,
         employeeId: selectedSalaryRecord.employee.id,
         address: selectedSalaryRecord.employee.address,
         department: selectedSalaryRecord.employee.department,
@@ -270,16 +276,24 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
           <FormLabel>Address</FormLabel>
           <Input id="email" type="text" size="sm" {...register('address')} />
         </FormControl>
-        <FormControl>
-          <FormLabel>Designation</FormLabel>
-          <Input id="email" type="text" size="sm" />
-        </FormControl>
+
         <FormControl>
           <FormLabel>Department</FormLabel>
           <Select id="email" type="text" size="sm" {...register('department')}>
             {departments?.edges.map((department) => (
               <>
                 <option value={department?.name}>{department?.name}</option>
+              </>
+            ))}
+          </Select>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Designation</FormLabel>
+          <Select id="email" type="text" size="sm" {...register('designation')}>
+            {designations?.edges.map((designation) => (
+              <>
+                <option value={designation?.id}>{designation?.name}</option>
               </>
             ))}
           </Select>

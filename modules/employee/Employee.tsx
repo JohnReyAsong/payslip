@@ -30,7 +30,6 @@ const EmployeeModule: FC = () => {
   const { isOpen: isOpenManage, onOpen: onOpenManage, onClose: onCloseManage } = useDisclosure()
   const { users } = useUsersQuery()
   const [selectedEmployee, setSelectedEmployee] = useState<CustomUser>()
-  console.log(users)
 
   return (
     <>

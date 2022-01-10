@@ -5,10 +5,9 @@ import { useForm } from 'react-hook-form'
 import useLoginMutation from '@hooks/mutations/useLoginMutation'
 import { AuthenticateInput } from 'types'
 import { showToast } from '@utils/toastUtils'
-import { useRouter } from 'next/router'
+import { login } from '@utils/authUtils'
 
 const LoginModule: FC = () => {
-  const router = useRouter()
   const { handleSubmit, register, formState } = useForm()
   const { isSubmitting } = formState
   const { loginAction } = useLoginMutation()
@@ -20,8 +19,9 @@ const LoginModule: FC = () => {
       },
     })
     if (data?.authenticate) {
+      const { token } = data.authenticate
       await showToast('Login successfully!', 'success')
-      router.push('/')
+      login(token, '/')
     }
   }
 

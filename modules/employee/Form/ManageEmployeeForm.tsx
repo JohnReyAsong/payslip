@@ -26,6 +26,7 @@ const ROLE_TYPES = [
 ]
 
 const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmployee, isCreate }) => {
+  console.log(selectedEmployee)
   const { handleSubmit, register, formState, reset } = useForm()
   const { createUserAction, updateUserAction } = useUserMutation()
   const { refetchUsers } = useUsersQuery()
@@ -36,6 +37,7 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
 
   const onSelectDepartment = (name: string) => {
     const filterDesignations = designations?.edges.filter((designation) => designation?.department.name === name)
+    console.log('filterDesignations', filterDesignations)
     setFilteredDesignations(filterDesignations as Designation[])
   }
 
@@ -68,6 +70,7 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
           firstname: value.firstname,
           lastname: value.lastname,
           emailAddress: selectedEmployee?.emailAddress,
+          designation: value.designation,
           password: value.password,
           role: value.role,
           department: value.department,
@@ -100,7 +103,9 @@ const ManageEmployeeForm: FC<ManageEmployeeFormProps> = ({ onClose, selectedEmpl
         accountNumber: selectedEmployee?.accountNumber || '',
         bankName: selectedEmployee?.bankName || '',
       })
+      onSelectDepartment(selectedEmployee?.department)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEmployee, reset])
 
   return (

@@ -11,6 +11,7 @@ export const SALARY_RECORDS = gql`
           firstname
           lastname
           address
+          designation
           emailAddress
           role
           department

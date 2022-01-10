@@ -66,6 +66,7 @@ const Payslip: FC = () => {
               firstname: '',
               lastname: '',
               address: '',
+              designation: '',
               emailAddress: '',
               role: UserRole.Member,
               department: '',
