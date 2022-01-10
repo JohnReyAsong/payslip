@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { FormControl, FormLabel, Input, Stack, HStack, Select, IconButton, Text, Flex, Button } from '@chakra-ui/react'
 
@@ -39,7 +39,6 @@ interface CustomSalaryRecord {
 }
 
 const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalaryRecord, isCreate }) => {
-  console.log(selectedSalaryRecord)
   const { users } = useUsersQuery()
   const { bonuses: earningsMapping } = useBonusesQuery()
   const { deductions: deductionsMapping } = useDeductionsQuery()
@@ -47,6 +46,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
   const { designations } = useDesignationsQuery()
   const { departments } = useDepartmentsQuery()
   const { refetchSalaryRecords } = useSalaryRecordsQuery()
+  const [basicSalary, setBasicSalary] = useState<number>()
   const { handleSubmit, register, formState, reset, setValue, control, watch } = useForm<CustomSalaryRecord>({
     defaultValues: {
       employeeId: '',
@@ -78,7 +78,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
     ?.map((reimbursement) => parseInt(reimbursement.amount as unknown as string))
     .reduce((prev, curr) => prev + curr, 0)
 
-  const netIncome = (totalEarnings || 0) + (totalDeductions || 0) + (totalReimbursements || 0)
+  const netIncome = (totalEarnings || 0) + (totalReimbursements || 0) + (basicSalary || 0) - (totalDeductions || 0)
 
   const { fields: earningsFields, append: earningsAppend } = useFieldArray({
     control,
@@ -130,10 +130,10 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
           grossPay: values.grossIncome,
           payrollDate: values.payrollDate,
           payPeriod: {
-            startDate: values.payrollDate as unknown as string,
-            endDate: values.payrollDate as unknown as string,
+            startDate: values.startDate as unknown as string,
+            endDate: values.endDate as unknown as string,
           },
-          depositDate: values.payrollDate,
+          depositDate: values.depositDate,
           reimbursements: parseReimbursements,
           bonus: parseEarnings,
           deductions: parseDeductions,
@@ -153,11 +153,11 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
           grossPay: values.grossIncome,
           payrollDate: values.payrollDate,
           payPeriod: {
-            startDate: values.payrollDate as unknown as string,
-            endDate: values.payrollDate as unknown as string,
+            startDate: values.startDate as unknown as string,
+            endDate: values.endDate as unknown as string,
           },
 
-          depositDate: values.payrollDate,
+          depositDate: values.depositDate,
           reimbursements: parseReimbursements,
           bonus: parseEarnings,
           deductions: parseDeductions,
@@ -179,17 +179,18 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
     setValue('accountNumber', employee?.accountNumber || '')
     setValue('bankName', employee?.bankName || '')
     setValue('grossIncome', employee?.baseSalary || 0)
+    setBasicSalary(employee?.baseSalary || 0)
   }
 
   useEffect(() => {
-    if (selectedSalaryRecord) {
+    if (selectedSalaryRecord?.id) {
       reset({
+        employeeId: selectedSalaryRecord.employee.id,
         startDate: selectedSalaryRecord.payPeriod.startDate,
         endDate: selectedSalaryRecord.payPeriod.endDate,
         payrollDate: selectedSalaryRecord.payrollDate,
         depositDate: selectedSalaryRecord.depositDate,
         designation: selectedSalaryRecord.employee.designation,
-        employeeId: selectedSalaryRecord.employee.id,
         address: selectedSalaryRecord.employee.address,
         department: selectedSalaryRecord.employee.department,
         accountNumber: selectedSalaryRecord.employee.accountNumber,
@@ -201,6 +202,8 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
           : [{ id: '', amount: 0 }],
       })
     }
+    setBasicSalary(selectedSalaryRecord?.employee.baseSalary)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSalaryRecord, reset])
 
   return (
@@ -274,12 +277,12 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
 
         <FormControl>
           <FormLabel>Address</FormLabel>
-          <Input id="email" type="text" size="sm" {...register('address')} />
+          <Input id="email" type="text" size="sm" {...register('address')} isDisabled />
         </FormControl>
 
         <FormControl>
           <FormLabel>Department</FormLabel>
-          <Select id="email" type="text" size="sm" {...register('department')}>
+          <Select id="email" type="text" size="sm" {...register('department')} isDisabled>
             {departments?.edges.map((department) => (
               <>
                 <option value={department?.name}>{department?.name}</option>
@@ -290,7 +293,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
 
         <FormControl>
           <FormLabel>Designation</FormLabel>
-          <Select id="email" type="text" size="sm" {...register('designation')}>
+          <Select id="email" type="text" size="sm" {...register('designation')} isDisabled>
             {designations?.edges.map((designation) => (
               <>
                 <option value={designation?.id}>{designation?.name}</option>
@@ -330,7 +333,7 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
               Total Earnings:
             </Text>
             <Text fontWeight="semibold" fontSize="sm" textAlign="end" pt="2">
-              {totalEarnings}
+              {(totalEarnings || 0) + (basicSalary || 0)}
             </Text>
           </Flex>
         </FormControl>
@@ -464,13 +467,13 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
           <FormLabel size="xs" color="gray.700">
             Account Number
           </FormLabel>
-          <Input id="email" type="text" size="sm" {...register('accountNumber')} />
+          <Input id="email" type="text" size="sm" {...register('accountNumber')} isDisabled />
         </FormControl>
         <FormControl>
           <FormLabel size="xs" color="gray.700">
             Bank Name
           </FormLabel>
-          <Input id="email" type="text" size="sm" {...register('bankName')} />
+          <Input id="email" type="text" size="sm" {...register('bankName')} isDisabled />
         </FormControl>
       </Stack>
 

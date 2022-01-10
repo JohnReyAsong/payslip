@@ -7,6 +7,7 @@ const useSalaryRecordsQuery = () => {
   const { data, refetch, loading } = useQuery<{ salaryRecords: SalaryRecordConnection }>(SALARY_RECORDS, {
     skip: !isBrowser,
   })
+
   return {
     salaryRecords: data?.salaryRecords,
     refetchSalaryRecords: refetch,

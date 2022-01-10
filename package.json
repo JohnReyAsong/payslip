@@ -36,6 +36,7 @@
     "@emotion/styled": "^11.3.0",
     "@heroicons/react": "^1.0.4",
     "@hookform/resolvers": "^2.8.3",
+    "@types/zen-observable": "^0.8.3",
     "axios": "^0.22.0",
     "framer-motion": "^4.1.17",
     "graphql": "^15.6.1",

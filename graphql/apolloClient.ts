@@ -10,10 +10,10 @@ const request = async (operation: Operation) => {
   operation.setContext({
     ...(isBrowser &&
       isClientLoggedIn() && {
-      headers: {
-        authorization: `Bearer ${getClientAccessToken()}`,
-      },
-    }),
+        headers: {
+          authorization: `Bearer ${getClientAccessToken()}`,
+        },
+      }),
   })
 }
 

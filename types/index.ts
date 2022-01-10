@@ -1,4 +1,5 @@
 export type Maybe<T> = T | null
+export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
@@ -79,15 +80,15 @@ export type CreateReimbursementInput = {
 }
 
 export type CreateSalaryRecordInput = {
-  bonus?: Maybe<Array<Maybe<BonusInput>>>
-  deductions?: Maybe<Array<Maybe<DeductionsInput>>>
-  depositDate?: Maybe<Scalars['DateTime']>
+  bonus?: InputMaybe<Array<InputMaybe<BonusInput>>>
+  deductions?: InputMaybe<Array<InputMaybe<DeductionsInput>>>
+  depositDate?: InputMaybe<Scalars['DateTime']>
   employee: Scalars['ID']
   grossPay: Scalars['Float']
   netPay: Scalars['Float']
   payPeriod: DateTimePeriodInput
   payrollDate: Scalars['DateTime']
-  reimbursements?: Maybe<Array<Maybe<ReimbursementsInput>>>
+  reimbursements?: InputMaybe<Array<InputMaybe<ReimbursementsInput>>>
 }
 
 export type CreateUserInput = {
@@ -190,7 +191,7 @@ export type DesignationtConnection = {
 }
 
 export type GenerateEmail = {
-  attachments: Array<Maybe<Attachments>>
+  attachments: Array<InputMaybe<Attachments>>
   emailAddress: Scalars['EmailAddress']
 }
 
@@ -273,7 +274,7 @@ export type MutationDeleteSalaryRecordArgs = {
 }
 
 export type MutationSendEmailArgs = {
-  input?: Maybe<GenerateEmail>
+  input?: InputMaybe<GenerateEmail>
 }
 
 export type MutationUpdateBonusArgs = {
@@ -334,62 +335,62 @@ export type Query = {
 }
 
 export type QueryBonusArgs = {
-  id?: Maybe<Scalars['ID']>
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type QueryBonusesArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryDeductionArgs = {
-  id?: Maybe<Scalars['ID']>
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type QueryDeductionsArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryDepartmentArgs = {
-  id?: Maybe<Scalars['ID']>
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type QueryDepartmentsArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryDesignationArgs = {
-  id?: Maybe<Scalars['ID']>
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type QueryDesignationsArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryReimbursementArgs = {
-  id?: Maybe<Scalars['ID']>
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type QueryReimbursementsArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QuerySalaryRecordArgs = {
-  id?: Maybe<Scalars['ID']>
+  id?: InputMaybe<Scalars['ID']>
 }
 
 export type QuerySalaryRecordsArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type QueryUsersArgs = {
-  filter?: Maybe<StringQueryOperatorInput>
-  first?: Maybe<Scalars['Int']>
+  filter?: InputMaybe<StringQueryOperatorInput>
+  first?: InputMaybe<Scalars['Int']>
 }
 
 export type Reimbursement = {
@@ -454,12 +455,12 @@ export type SalaryRecordConnectionsEdge = {
 }
 
 export type StringQueryOperatorInput = {
-  contains?: Maybe<Scalars['String']>
-  eq?: Maybe<Scalars['String']>
-  in?: Maybe<Array<Scalars['String']>>
-  ne?: Maybe<Scalars['String']>
-  nin?: Maybe<Array<Scalars['String']>>
-  startsWith?: Maybe<Scalars['String']>
+  contains?: InputMaybe<Scalars['String']>
+  eq?: InputMaybe<Scalars['String']>
+  in?: InputMaybe<Array<Scalars['String']>>
+  ne?: InputMaybe<Scalars['String']>
+  nin?: InputMaybe<Array<Scalars['String']>>
+  startsWith?: InputMaybe<Scalars['String']>
 }
 
 export type UpdateBonusInput = {
@@ -475,18 +476,18 @@ export type UpdateDepartmentInput = {
 }
 
 export type UpdateDesignationInput = {
-  department?: Maybe<Scalars['ID']>
+  department?: InputMaybe<Scalars['ID']>
   name: Scalars['String']
 }
 
 export type UpdateMeInput = {
-  accountNumber?: Maybe<Scalars['String']>
-  address?: Maybe<Scalars['String']>
-  bankName?: Maybe<Scalars['String']>
-  firstname?: Maybe<Scalars['String']>
-  lastname?: Maybe<Scalars['String']>
-  newPassword?: Maybe<Scalars['String']>
-  oldPassword?: Maybe<Scalars['String']>
+  accountNumber?: InputMaybe<Scalars['String']>
+  address?: InputMaybe<Scalars['String']>
+  bankName?: InputMaybe<Scalars['String']>
+  firstname?: InputMaybe<Scalars['String']>
+  lastname?: InputMaybe<Scalars['String']>
+  newPassword?: InputMaybe<Scalars['String']>
+  oldPassword?: InputMaybe<Scalars['String']>
 }
 
 export type UpdateReimbursementInput = {
@@ -494,29 +495,29 @@ export type UpdateReimbursementInput = {
 }
 
 export type UpdateSalaryRecordInput = {
-  bonus?: Maybe<Array<Maybe<BonusInput>>>
-  deductions?: Maybe<Array<Maybe<DeductionsInput>>>
-  depositDate?: Maybe<Scalars['DateTime']>
-  employee?: Maybe<Scalars['ID']>
-  grossPay?: Maybe<Scalars['Float']>
-  netPay?: Maybe<Scalars['Float']>
-  payPeriod?: Maybe<DateTimePeriodInput>
-  payrollDate?: Maybe<Scalars['DateTime']>
-  reimbursements?: Maybe<Array<Maybe<ReimbursementsInput>>>
+  bonus?: InputMaybe<Array<InputMaybe<BonusInput>>>
+  deductions?: InputMaybe<Array<InputMaybe<DeductionsInput>>>
+  depositDate?: InputMaybe<Scalars['DateTime']>
+  employee?: InputMaybe<Scalars['ID']>
+  grossPay?: InputMaybe<Scalars['Float']>
+  netPay?: InputMaybe<Scalars['Float']>
+  payPeriod?: InputMaybe<DateTimePeriodInput>
+  payrollDate?: InputMaybe<Scalars['DateTime']>
+  reimbursements?: InputMaybe<Array<InputMaybe<ReimbursementsInput>>>
 }
 
 export type UpdateUserInput = {
-  accountNumber?: Maybe<Scalars['String']>
-  address?: Maybe<Scalars['String']>
-  bankName?: Maybe<Scalars['String']>
-  baseSalary?: Maybe<Scalars['Float']>
-  department?: Maybe<Scalars['String']>
-  designation?: Maybe<Scalars['String']>
-  emailAddress?: Maybe<Scalars['EmailAddress']>
-  firstname?: Maybe<Scalars['String']>
-  lastname?: Maybe<Scalars['String']>
-  password?: Maybe<Scalars['String']>
-  role?: Maybe<UserRole>
+  accountNumber?: InputMaybe<Scalars['String']>
+  address?: InputMaybe<Scalars['String']>
+  bankName?: InputMaybe<Scalars['String']>
+  baseSalary?: InputMaybe<Scalars['Float']>
+  department?: InputMaybe<Scalars['String']>
+  designation?: InputMaybe<Scalars['String']>
+  emailAddress?: InputMaybe<Scalars['EmailAddress']>
+  firstname?: InputMaybe<Scalars['String']>
+  lastname?: InputMaybe<Scalars['String']>
+  password?: InputMaybe<Scalars['String']>
+  role?: InputMaybe<UserRole>
 }
 
 export type User = {

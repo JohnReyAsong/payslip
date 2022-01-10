@@ -13,7 +13,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  MenuDivider,
   useDisclosure,
 } from '@chakra-ui/react'
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
@@ -87,10 +86,6 @@ const DesignationModule: FC = () => {
                     >
                       Edit
                     </MenuItem>
-
-                    <MenuDivider my={0} />
-
-                    <MenuItem p={3}>Delete</MenuItem>
                   </MenuList>
                 </Menu>
               </Th>

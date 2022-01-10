@@ -1,7 +1,6 @@
 import { FC, useState } from 'react'
 import {
   Flex,
-  Text,
   Table,
   Thead,
   Tbody,
@@ -10,9 +9,6 @@ import {
   Td,
   Button,
   Icon,
-  InputGroup,
-  InputLeftElement,
-  Input,
   Menu,
   MenuButton,
   MenuList,
@@ -20,7 +16,7 @@ import {
   MenuDivider,
   useDisclosure,
 } from '@chakra-ui/react'
-import { DotsHorizontalIcon, SearchIcon, ChevronDownIcon } from '@heroicons/react/solid'
+import { DotsHorizontalIcon } from '@heroicons/react/solid'
 import moment from 'moment'
 
 import ManagePayslipModal from './Modal/ManagePayslipModal'
@@ -33,6 +29,7 @@ import { showToast } from '@utils/toastUtils'
 const Payslip: FC = () => {
   const { isOpen: isOpenManage, onOpen: onOpenManage, onClose: onCloseManage } = useDisclosure()
   const { salaryRecords, refetchSalaryRecords } = useSalaryRecordsQuery()
+
   const [selectedSalaryRecord, setSelectedSalaryRecord] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -103,26 +100,7 @@ const Payslip: FC = () => {
           })
         }}
       />
-      <Flex justify="space-between">
-        <InputGroup mr="2">
-          <InputLeftElement pointerEvents="none">
-            <Icon as={SearchIcon} boxSize={4} color="gray.400" />
-          </InputLeftElement>
-          <Input type="search" placeholder="Search payslip..." />
-        </InputGroup>
-        <Menu>
-          <MenuButton as={Button} pr={8} variant="outline">
-            <Flex>
-              <Text>Generate</Text>
-              <Icon as={ChevronDownIcon} boxSize={5} color="gray.400" />
-            </Flex>
-          </MenuButton>
-          <MenuList minWidth={42} p={0}>
-            <MenuItem>PDF File</MenuItem>
-            <MenuDivider my={0} />
-            <MenuItem>Excel File</MenuItem>
-          </MenuList>
-        </Menu>
+      <Flex justifyContent="end">
         <Button mb={4} ml={2} colorScheme="blue" px={8} onClick={onOpenManage}>
           Create Payslip
         </Button>

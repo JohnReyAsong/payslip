@@ -1,6 +1,5 @@
 import { FC } from 'react'
-import { Avatar, Button, Flex, Heading, Menu, MenuButton, MenuList, Text, VStack } from '@chakra-ui/react'
-import { ChevronUpIcon } from '@heroicons/react/outline'
+import { Avatar, Flex, Heading, VStack } from '@chakra-ui/react'
 import {
   LogoutIcon,
   ReceiptTaxIcon,
@@ -31,7 +30,14 @@ const AppSidebar: FC<AppSidebarProps> = ({ isCollapsed = false }) => {
           borderBottom="1px solid #E5E7EB"
         >
           <Link href={{ pathname: '/' }}>
-            <Avatar src="/logo.png" name={process.env.appName} size="xs" borderRadius="md" cursor="pointer" />
+            <Avatar
+              src="/logo.png"
+              name={process.env.appName}
+              size="xs"
+              bg="white"
+              borderRadius="md"
+              cursor="pointer"
+            />
           </Link>
           {!isCollapsed && (
             <Heading ml="6px" as="h4" fontSize={12} mb={0}>
@@ -41,6 +47,7 @@ const AppSidebar: FC<AppSidebarProps> = ({ isCollapsed = false }) => {
         </Flex>
         <VStack px={2} mt={3} spacing={stackSpacing} alignItems="start">
           <MenuItem icon={ReceiptTaxIcon} label="Payslip" isCollapsed={isCollapsed} pathname="/" />
+
           <MenuItem icon={UserIcon} label="Employee" isCollapsed={isCollapsed} pathname="/employee" />
           <MenuItem icon={UserGroupIcon} label="Department" isCollapsed={isCollapsed} pathname="/department" />
           <MenuItem icon={UserGroupIcon} label="Designation" isCollapsed={isCollapsed} pathname="/designation" />
@@ -55,43 +62,9 @@ const AppSidebar: FC<AppSidebarProps> = ({ isCollapsed = false }) => {
         </VStack>
       </Flex>
       <Flex px={2} pb={12} flexDir="column">
-        <Menu id="user-menu" matchWidth>
-          <MenuButton
-            w="full"
-            as={Button}
-            variant="ghost"
-            p={1}
-            mt={4}
-            _hover={{ background: 'rgba(0, 0, 0, 0.04)' }}
-            {...(!isCollapsed && {
-              rightIcon: <ChevronUpIcon />,
-            })}
-          >
-            <Flex
-              alignItems="center"
-              {...(isCollapsed && {
-                justifyContent: 'center',
-              })}
-            >
-              <Avatar size={isCollapsed ? 'xs' : 'sm'} borderRadius="md" name={process.env.appName} src="/logo.png" />
-              {!isCollapsed && (
-                <Flex flexDir="column" ml={2} alignItems="start">
-                  <Heading maxW="124px" as="h4" size="xs" mb={0} isTruncated>
-                    {process.env.appName}
-                  </Heading>
-                  <Text maxW="124px" lineHeight="shorter" fontSize="smaller" color="gray.800" isTruncated>
-                    {process.env.appDescription}
-                  </Text>
-                </Flex>
-              )}
-            </Flex>
-          </MenuButton>
-          <MenuList mb={3} p={2} minW="175px">
-            <VStack spacing={1} alignItems="start">
-              <MenuItem icon={LogoutIcon} label="Logout" onClick={logout} />
-            </VStack>
-          </MenuList>
-        </Menu>
+        <VStack spacing={1} alignItems="start">
+          <MenuItem icon={LogoutIcon} label="Logout" isCollapsed={isCollapsed} onClick={logout} />
+        </VStack>
       </Flex>
     </Flex>
   )
