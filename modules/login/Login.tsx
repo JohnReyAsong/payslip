@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { FormControl, FormLabel, Input, Box, Button, Heading, Flex } from '@chakra-ui/react'
 import { useForm } from 'react-hook-form'
+import { FormControl, FormLabel, Input, Box, Button, Heading, Flex } from '@chakra-ui/react'
 
 import useLoginMutation from '@hooks/mutations/useLoginMutation'
 import { AuthenticateInput } from 'types'
