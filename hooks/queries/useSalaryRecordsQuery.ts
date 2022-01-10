@@ -6,6 +6,7 @@ import { SalaryRecordConnection } from 'types'
 const useSalaryRecordsQuery = () => {
   const { data, refetch, loading } = useQuery<{ salaryRecords: SalaryRecordConnection }>(SALARY_RECORDS, {
     skip: !isBrowser,
+    fetchPolicy: 'no-cache',
   })
 
   return {

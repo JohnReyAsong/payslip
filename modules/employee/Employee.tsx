@@ -110,7 +110,6 @@ const EmployeeModule: FC = () => {
                     </MenuItem>
 
                     <MenuDivider my={0} />
-                    <MenuItem p={3}>Delete</MenuItem>
                   </MenuList>
                 </Menu>
               </Th>

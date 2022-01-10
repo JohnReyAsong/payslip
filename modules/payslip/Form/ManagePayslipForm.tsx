@@ -328,6 +328,15 @@ const ManagePayslipForm: FC<ManagePayslipFormProps> = ({ onClose, selectedSalary
             )
           })}
 
+          <Flex justify="space-between" pr="10">
+            <Text fontSize="sm" textAlign="end" pr="10" pt="2">
+              Basic Salary
+            </Text>
+            <Text fontSize="sm" textAlign="end" pt="2">
+              {basicSalary || 0}
+            </Text>
+          </Flex>
+
           <Flex justify="space-between" borderTop="1px solid" borderColor="gray.200" mt="3" pr="10">
             <Text fontWeight="semibold" fontSize="sm" textAlign="end" pr="10" pt="2">
               Total Earnings:

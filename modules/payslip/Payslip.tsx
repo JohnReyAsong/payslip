@@ -15,26 +15,34 @@ import {
   MenuItem,
   MenuDivider,
   useDisclosure,
+  Box,
 } from '@chakra-ui/react'
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
 import moment from 'moment'
 
 import ManagePayslipModal from './Modal/ManagePayslipModal'
-import { useSalaryRecordsQuery } from '@hooks/queries'
+import { useSalaryRecordsQuery, useDesignationsQuery } from '@hooks/queries'
 import { UserRole } from 'types'
 import HovAlertDialog from '@components/HovAlertDialog'
 import { useSalaryRecordMutation } from '@hooks/mutations'
 import { showToast } from '@utils/toastUtils'
+import HovPayslipForm from '@components/HovPayslipForm'
+import { convertToPdf } from '@utils/pdfConverterUtils'
 
 const Payslip: FC = () => {
   const { isOpen: isOpenManage, onOpen: onOpenManage, onClose: onCloseManage } = useDisclosure()
   const { salaryRecords, refetchSalaryRecords } = useSalaryRecordsQuery()
-
+  const { designations } = useDesignationsQuery()
   const [selectedSalaryRecord, setSelectedSalaryRecord] = useState<any>()
+  const [salaryRecordPDFValues, setSalaryRecordPDFValues] = useState<any>()
   const [isLoading, setIsLoading] = useState(false)
-
   const deleteSalaryRecord = useDisclosure()
   const { deleteSalaryRecordAction } = useSalaryRecordMutation()
+
+  const findDesignation = (id?: string) => {
+    const designation = designations?.edges?.find((d) => d?.id === id)
+    return designation?.name
+  }
 
   const onDeletePayslip = async () => {
     setIsLoading(true)
@@ -141,7 +149,7 @@ const Payslip: FC = () => {
                           id: salaryRecord?.id,
                           employee: salaryRecord?.employee,
                           payPeriod: salaryRecord?.payPeriod,
-                          payrollDate: moment(salaryRecord?.depositDate).format('YYYY-MM-DD'),
+                          payrollDate: moment(salaryRecord?.payrollDate).format('YYYY-MM-DD'),
                           netPay: salaryRecord?.netPay || 0,
                           grossPay: salaryRecord?.grossPay || 0,
                           depositDate: moment(salaryRecord?.depositDate).format('YYYY-MM-DD'),
@@ -163,7 +171,7 @@ const Payslip: FC = () => {
                           id: salaryRecord?.id,
                           employee: salaryRecord?.employee,
                           payPeriod: salaryRecord?.payPeriod,
-                          payrollDate: moment(salaryRecord?.depositDate).format('YYYY-MM-DD'),
+                          payrollDate: moment(salaryRecord?.payrollDate).format('YYYY-MM-DD'),
                           netPay: salaryRecord?.netPay || 0,
                           grossPay: salaryRecord?.grossPay || 0,
                           depositDate: moment(salaryRecord?.depositDate).format('YYYY-MM-DD'),
@@ -176,6 +184,42 @@ const Payslip: FC = () => {
                     >
                       Delete
                     </MenuItem>
+
+                    <MenuItem
+                      p={3}
+                      onClick={async () => {
+                        await setSalaryRecordPDFValues({
+                          id: salaryRecord?.id,
+                          employee: {
+                            name: `${salaryRecord?.employee.firstname} ${salaryRecord?.employee.lastname}`,
+                            address: salaryRecord?.employee.address,
+                            designation: findDesignation(salaryRecord?.employee.designation),
+                            accountNumber: salaryRecord?.employee.accountNumber,
+                            bankName: salaryRecord?.employee.bankName,
+                            department: salaryRecord?.employee.department,
+                          },
+                          payPeriod: {
+                            startDate: moment(salaryRecord?.payPeriod.startDate).format('MMM DD, YYYY'),
+                            endDate: moment(salaryRecord?.payPeriod.endDate).format('MMM DD, YYYY'),
+                          },
+                          payrollDate: moment(salaryRecord?.depositDate).format('MMM DD, YYYY'),
+                          netPay: salaryRecord?.netPay || 0,
+                          grossPay: salaryRecord?.grossPay || 0,
+                          depositDate: moment(salaryRecord?.depositDate).format('MMM DD, YYYY'),
+                          earnings: salaryRecord?.bonus,
+                          deductions: salaryRecord?.deductions,
+                          reimbursements: salaryRecord?.reimbursements,
+                        })
+                        convertToPdf(
+                          `Payslip-${salaryRecord?.employee.lastname}(${moment(salaryRecord?.depositDate).format(
+                            'MMM DD, YYYY'
+                          )})`
+                        )
+                      }}
+                    >
+                      PDF
+                    </MenuItem>
+                    <MenuItem p={3}>Excel</MenuItem>
                   </MenuList>
                 </Menu>
               </Th>
@@ -183,6 +227,11 @@ const Payslip: FC = () => {
           ))}
         </Tbody>
       </Table>
+
+      <Box id="divToPrint" pos="absolute" top={-1000}>
+        <HovPayslipForm values={salaryRecordPDFValues} />
+      </Box>
+
       <HovAlertDialog
         title="Delete Payslip"
         description="Are you sure? You can't undo this action afterwards."
