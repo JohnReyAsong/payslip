@@ -19,6 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { DotsHorizontalIcon } from '@heroicons/react/solid'
 import moment from 'moment'
+import { CSVLink } from 'react-csv'
 
 import ManagePayslipModal from './Modal/ManagePayslipModal'
 import { useSalaryRecordsQuery, useDesignationsQuery } from '@hooks/queries'
@@ -28,6 +29,9 @@ import { useSalaryRecordMutation } from '@hooks/mutations'
 import { showToast } from '@utils/toastUtils'
 import HovPayslipForm from '@components/HovPayslipForm'
 import { convertToPdf } from '@utils/pdfConverterUtils'
+import { excelForm } from '@utils/excelUtils'
+
+// eslint-disable-next-line no-sparse-arrays
 
 const Payslip: FC = () => {
   const { isOpen: isOpenManage, onOpen: onOpenManage, onClose: onCloseManage } = useDisclosure()
@@ -219,7 +223,37 @@ const Payslip: FC = () => {
                     >
                       PDF
                     </MenuItem>
-                    <MenuItem p={3}>Excel</MenuItem>
+                    <MenuItem p={3}>
+                      <CSVLink
+                        data={excelForm({
+                          id: salaryRecord?.id,
+                          employee: {
+                            name: `${salaryRecord?.employee.firstname} ${salaryRecord?.employee.lastname}`,
+                            address: salaryRecord?.employee.address,
+                            designation: findDesignation(salaryRecord?.employee.designation),
+                            accountNumber: salaryRecord?.employee.accountNumber,
+                            bankName: salaryRecord?.employee.bankName,
+                            department: salaryRecord?.employee.department,
+                          },
+                          payPeriod: {
+                            startDate: moment(salaryRecord?.payPeriod.startDate).format('MMM DD, YYYY'),
+                            endDate: moment(salaryRecord?.payPeriod.endDate).format('MMM DD, YYYY'),
+                          },
+                          payrollDate: moment(salaryRecord?.depositDate).format('MMM DD, YYYY'),
+                          netPay: salaryRecord?.netPay || 0,
+                          grossPay: salaryRecord?.grossPay || 0,
+                          depositDate: moment(salaryRecord?.depositDate).format('MMM DD, YYYY'),
+                          earnings: salaryRecord?.bonus,
+                          deductions: salaryRecord?.deductions,
+                          reimbursements: salaryRecord?.reimbursements,
+                        })}
+                        filename={`Payslip-${salaryRecord?.employee.lastname}(${moment(
+                          salaryRecord?.depositDate
+                        ).format('MMM DD, YYYY')}).csv`}
+                      >
+                        Excel
+                      </CSVLink>
+                    </MenuItem>
                   </MenuList>
                 </Menu>
               </Th>
